@@ -18,6 +18,10 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json'}));
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+app.get('/', function(req,res){
+	res.render('index');
+});
+
 var PORT = process.env.PORT || 8000;
 
 app.listen(PORT, function () {

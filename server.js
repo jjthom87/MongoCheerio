@@ -9,6 +9,8 @@ var User = require('./User.model');
 
 var db = 'mongodb://localhost/usercomments';
 
+mongoose.connect(db);
+
 app.use('/static', express.static('public/assets'));
 
 app.use(bodyParser.urlencoded({ extended: false}));
@@ -19,8 +21,38 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 app.get('/', function(req,res){
-	res.render('index');
+	User.find({}).exec(function(err, results){
+		if(err){
+			res.send('OMG ERROR');
+		} else {
+			res.render('index', {comments: results});		
+		}
+	});
 });
+
+app.post('/comment', function(req,res){
+	User.create(req.body, function(err){
+		if (err) {
+			res.send('error')
+		} else {
+			res.redirect('/');
+		}
+	})
+})
+
+app.delete('/delete', function(req,res){
+	var id = req.params._id;
+	User.findOneAndRemove({
+		id: id
+	}, function (err, book){
+		if (err){
+			res.send('error');
+		} else {
+			console.log('book deleted');
+			res.status(204);
+		}
+	})
+})
 
 var PORT = process.env.PORT || 8000;
 

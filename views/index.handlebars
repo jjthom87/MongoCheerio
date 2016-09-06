@@ -1,1 +1,28 @@
-<h1>Welcome to the Scraper</h1>
+<h1 class="text-center">Welcome to the Scraper</h1>
+
+<div class = "row">
+	<div class="col-xs-6 col-sm-4">
+	</div>
+	<div class="col-xs-6 col-sm-3">
+		<h2>Post Comment</h2>
+		<form method="POST" action="/comment" class="button-size">
+			<textarea type="text" name="comment"></textarea>
+			<br>
+			<button class="btn btn-warning type"="submit">Submit comment</button>
+		</form>
+	</div>
+	<div class="col-xs-6 col-sm-3">
+		<h2>Review Comments</h2>
+		{{#each comments}}
+		<p class="alert alert-danger" style="width: 40%">
+			{{this.comment}}
+		</p>
+		{{/each}}
+		<form action="/delete?_method=DELETE" method="POST">
+			<input type="hidden" name="id" value="{{this.id}}">
+			<button type="submit" class="btn btn-warning" id="eatBurger">Delete Comment</button>
+		</form>
+	</div>
+	<div class="col-xs-6 col-sm-4">
+	</div>
+</div>

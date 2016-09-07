@@ -7,7 +7,7 @@ var methodOverride = require('method-override');
 
 var User = require('./User.model');
 
-var db = 'mongodb://localhost/usercomments';
+var db = 'mongodb://localhost/mongocheerio1';
 
 mongoose.connect(db);
 
@@ -31,7 +31,10 @@ app.get('/', function(req,res){
 });
 
 app.post('/comment', function(req,res){
-	User.create(req.body, function(err){
+	User.create({
+		comment: req.body.comment,
+		status: true
+		}, function(err){
 		if (err) {
 			res.send('error')
 		} else {
@@ -40,16 +43,15 @@ app.post('/comment', function(req,res){
 	})
 })
 
-app.delete('/delete', function(req,res){
-	var id = req.params._id;
-	User.findOneAndRemove({
-		id: id
+app.put('/update', function(req,res){
+	User.update({
+		status: true},{$set: {status: false}
 	}, function (err, book){
 		if (err){
 			res.send('error');
 		} else {
 			console.log('book deleted');
-			res.status(204);
+			res.redirect('/');
 		}
 	})
 })

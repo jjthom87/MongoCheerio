@@ -8,12 +8,27 @@ $(document).ready(function(){
 			var counter = 0;
 
 			resultsArray.push(results);
+			console.log(resultsArray);
 
 		function createTitle(index){
 			var dynDiv = $('<div id="dynDiv">');
-			var dynP = $('<p>');
-			dynP.append(resultsArray[0][index].title);
-			dynDiv.append(dynP);
+
+			var titleP = $('<p>');
+			titleP.append(resultsArray[0][index].title);
+			dynDiv.append(titleP);
+
+			var imageP = $('<img>');
+			imageP.attr('src', resultsArray[0][index].image).width(220);
+			dynDiv.append(imageP);
+
+			var linkA = $('<a>',{
+				href: resultsArray[0][index].link,
+				target: "_blank",
+				text: 'Link to album Review',
+				width: 500
+			});
+			dynDiv.append(linkA);
+		
 			return dynDiv;
 		}
 

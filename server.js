@@ -30,16 +30,24 @@ request('http://pitchfork.com/reviews/albums/', function(err, response, html){
 	}
 
 	var $ = cheerio.load(html);
-	var results = [];
+	var results = []
 
 	$('.review').each(function(index, element){
 		var title = $(element).find('h2').first().text();
-		var image = $(element).find('image').first().attr('src');
-		results.push(title);
-	})
-	results.forEach(function(title){
-		Pitchfork.insertMany([{
+		var image = $(element).find('img').first().attr('src');
+		var link = $(element).find('a').first().attr('href');
+
+		results.push({
 			title: title,
+			image: image,
+			link: link
+		});
+	});
+	results.forEach(function(result){
+		Pitchfork.insertMany([{
+			title: result.title,
+			image: result.image,
+			link: result.link,
 			status: true
 		}]);
 	});

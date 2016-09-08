@@ -15,6 +15,7 @@ var db = 'mongodb://localhost/mongocheerio1';
 mongoose.connect(db);
 
 app.use('/static', express.static('public/assets'));
+app.use(express.static('public'));
 
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(methodOverride('_method'));
@@ -76,8 +77,18 @@ app.put('/update', function(req,res){
 		} else {
 			res.redirect('/');
 		}
-	})
-})
+	});
+});
+
+app.get('/api', function(req,res){
+	Pitchfork.find({}).exec(function(err, results){
+		if(err){
+			res.send('Error');
+		} else {
+			res.json(results);
+		}
+	});
+});
 
 var PORT = process.env.PORT || 8000;
 

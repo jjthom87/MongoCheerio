@@ -70,11 +70,10 @@ app.post('/comment', function(req,res){
 app.put('/update', function(req,res){
 	User.update({
 		status: true},{$set: {status: false}
-	}, function (err, book){
+	}, function (err){
 		if (err){
 			res.send('error');
 		} else {
-			console.log('book deleted');
 			res.redirect('/');
 		}
 	})

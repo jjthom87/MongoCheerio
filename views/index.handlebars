@@ -1,9 +1,9 @@
 <h1 class="text-center">Welcome to the Scraper</h1>
 
 <div class = "row">
-	<div class="col-xs-6 col-sm-4">
-	</div>
 	<div class="col-xs-6 col-sm-3">
+	</div>
+	<div class="col-xs-6 col-sm-2">
 		<h2>Post Comment</h2>
 		<form method="POST" action="/comment" class="button-size">
 			<textarea type="text" name="comment"></textarea>
@@ -11,7 +11,10 @@
 			<button class="btn btn-warning type"="submit">Submit comment</button>
 		</form>
 	</div>
-	<div class="col-xs-6 col-sm-3">
+	<div class="col-xs-6 col-sm-2">
+		<h2>Album Title</h2>
+	</div>
+	<div class="col-xs-6 col-sm-2">
 		<h2>Review Comments</h2>
 		{{#each comments}}
 			{{#if this.status}}
@@ -25,6 +28,6 @@
 			<button type="submit" class="btn btn-warning">Delete Comment</button>
 		</form>
 	</div>
-	<div class="col-xs-6 col-sm-4">
+	<div class="col-xs-6 col-sm-3">
 	</div>
 </div>

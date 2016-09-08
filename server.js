@@ -36,8 +36,13 @@ request('http://pitchfork.com/reviews/albums/', function(err, response, html){
 		var image = $(element).find('image').first().attr('src');
 		results.push(title);
 	})
-	console.log(results);
-})
+	results.forEach(function(title){
+		Pitchfork.insertMany([{
+			title: title,
+			status: true
+		}]);
+	});
+});
 
 app.get('/', function(req,res){
 	User.find({}).exec(function(err, results){

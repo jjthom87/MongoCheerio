@@ -22,7 +22,7 @@ $(document).ready(function(){
 			dynDiv.append(imageP);
 
 			var linkA = $('<a>',{
-				href: resultsArray[0][index].link,
+				href: "http://www.pitchfork.com"+resultsArray[0][index].link,
 				target: "_blank",
 				text: 'Link to album Review',
 				width: 500
@@ -33,10 +33,14 @@ $(document).ready(function(){
 		}
 
 		function nextTitle(){
-			$('#dynDiv').remove();
-			var nextTitle = createTitle(counter);
-
-			$('#apiResults').append(nextTitle);
+			if (counter < resultsArray[0].length){
+				$('#dynDiv').remove();
+				var nextTitle = createTitle(counter);
+				$('#apiResults').append(nextTitle);
+			} else {
+				$('#dynDiv').remove();
+				$('#apiResults').text('<h2>End of List</h2>')
+			}
 		}
 
 		nextTitle();

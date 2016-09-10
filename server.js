@@ -24,68 +24,63 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json'}));
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-request('http://pitchfork.com/reviews/albums/', function(err, response, html){
-	if (err) {
-		throw err
-	}
+// app.get('/scrape', function(req,res){	
+	request('http://pitchfork.com/reviews/albums/', function(err, response, html){
+		if (err) {
+			throw err
+		}
 
-	var $ = cheerio.load(html);
-	var results = []
+		var $ = cheerio.load(html);
+		// var results = {};
+		var results = [];
 
-	$('.review').each(function(index, element){
-		var title = $(element).find('h2').first().text();
-		var image = $(element).find('img').first().attr('src');
-		var link = $(element).find('a').first().attr('href');
+		$('.review').each(function(index, element){
+			// results.title = $(element).find('h2').first().text();
+			// results.image = $(element).find('img').first().attr('src');
+			// results.link = $(element).find('a').first().attr('href');
+			var title = $(element).find('h2').first().text();
+			var image = $(element).find('img').first().attr('src');
+			var link = $(element).find('a').first().attr('href');
 
-		results.push({
-			title: title,
-			image: image,
-			link: link
+			// var album = new Pitchfork(results);
+
+			// album.save(function(err,doc){
+			// 	if (err){
+			// 		console.log(err)
+			// 	} else {
+			// 		console.log(doc);
+			// 	}
+			// });
+			results.push({
+				title: title,
+				image: image,
+				link: link
+			});
+		});
+		results.forEach(function(result){
+			Pitchfork.insertMany([{
+				title: result.title,
+				image: result.image,
+				link: result.link,
+				status: true
+			}]); 
 		});
 	});
-	results.forEach(function(result){
-		Pitchfork.insertMany([{
-			title: result.title,
-			image: result.image,
-			link: result.link,
-			status: true
-		}]);
-	});
-});
+// 	res.send("Scrape Complete");
+// });
+
+// app.get('/', function(req,res){
+// 	User.find({}).exec(function(err, results){
+// 		if(err){
+// 			res.send('OMG ERROR');
+// 		} else {
+// 			res.render('index', {comments: results});		
+// 		}
+// 	});
+// });
 
 app.get('/', function(req,res){
-	User.find({}).exec(function(err, results){
-		if(err){
-			res.send('OMG ERROR');
-		} else {
-			res.render('index', {comments: results});		
-		}
-	});
-});
-
-app.post('/comment', function(req,res){
-	User.create({
-		comment: req.body.comment,
-		status: true
-		}, function(err){
-		if (err) {
-			res.send('error')
-		} else {
-			res.redirect('/');
-		}
-	})
-})
-
-app.put('/update', function(req,res){
-	User.update({
-		status: true},{$set: {status: false}
-	}, function (err){
-		if (err){
-			res.send('error');
-		} else {
-			res.redirect('/');
-		}
-	});
+	res.render('index');		
 });
 
 app.get('/api', function(req,res){
@@ -94,6 +89,67 @@ app.get('/api', function(req,res){
 			res.send('Error');
 		} else {
 			res.json(results);
+		}
+	});
+});
+
+// app.post('/comment', function(req,res){
+// 	User.create({
+// 		comment: req.body.comment,
+// 		status: true
+// 		}, function(err, doc){
+// 		if (err) {
+// 			res.send('error')
+// 		} else {
+// 			Pitchfork.findOneAndUpdate({}, {$push: 
+// 				{'users': doc._id}}, {new: true},
+// 				function(err){
+// 					if(err){
+// 						res.send(err);
+// 					} else {
+// 						res.send(doc);
+// 					}
+// 			})
+// 		}
+// 	})
+// })
+
+app.post('/api/:id', function(req,res){
+	var newComm = new User(req.body);
+
+	newComm.save(function(err,doc){
+		if (err){
+			console.log(err)
+		} else {
+			Pitchfork.findOneAndUpdate({'_id': req.params.id}, { $push: {'user': doc._id}}, {new: true}).exec(function(err,doc){
+				if(err){
+					console.log(err)
+				} else {
+					res.send(doc);
+				}
+			})
+		}
+	})
+})
+
+// app.put('/update', function(req,res){
+// 	User.update({
+// 		status: true},{$set: {status: false}
+// 	}, function (err,doc){
+// 		if (err){
+// 			res.send('error');
+// 		} else {
+// 			res.send(doc);
+// 		}
+// 	});
+// });
+
+app.get('/api/:id', function(req,res){
+	Pitchfork.findOne({'_id': req.params.id}).populate('user').exec(function(err,doc){
+		if (err){
+			console.log(err)
+		} else {
+			res.json(doc)
 		}
 	});
 });

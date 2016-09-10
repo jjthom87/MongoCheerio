@@ -8,12 +8,13 @@ $(document).ready(function(){
 			var counter = 0;
 
 			resultsArray.push(results);
-			console.log(resultsArray);
 
 		function createTitle(index){
 			var dynDiv = $('<div id="dynDiv">');
 
-			var titleP = $('<p>');
+			var titleP = $('<p>',{
+				'data-id': resultsArray[0][index]._id
+			});
 			titleP.append(resultsArray[0][index].title);
 			dynDiv.append(titleP);
 
@@ -39,7 +40,7 @@ $(document).ready(function(){
 				$('#apiResults').append(nextTitle);
 			} else {
 				$('#dynDiv').remove();
-				$('#apiResults').text('<h2>End of List</h2>')
+				$('#apiResults').text('End of List')
 			}
 		}
 
@@ -49,7 +50,57 @@ $(document).ready(function(){
 			counter++;
 			nextTitle();
 		});
-
-
 	});
+
+		// $(document).on('click', "p", function(){
+		// 	$('#commentDiv').empty();
+			var thisId = $(this).attr('data-id');
+
+			$.ajax({
+				method: "GET",
+				url: "/api/" + thisId,
+			}).done(function(data){
+				$('#commentDiv').append('<input id = "nameInput" type="text" name = "name" />');
+				$('#commentDiv').append('<textarea id = "commInput" type="text" name = "comment"></textarea>');
+				$('#commentDiv').append('<button data-id="'+ data._id + '" id="saveComm">Post Comment</button>');
+
+				if(data.user){
+					$('#nameInput').val(data.user.name);
+					$('#commInput').val(data.user.comment);
+				}
+			});
+		// });
+
+		$(document).on('click', '#saveComm', function(){
+
+			var thisId = $(this).attr('data-id');
+
+			$.ajax({
+				method: "POST",
+				url: "/api/" + thisId,
+				data: {
+					name: $('#nameInput').val(),
+					comment: $('#commInput').val()
+				}
+			}).done(function(data){
+
+				// $('#commentDiv').empty();
+			});
+			$('#nameInput').val('');
+			$('#commInput').val('');
+		});
+
+	// $(document).on('click', 'p', function(){
+	// 	$('#commendDiv').empty();
+
+	// 	var thisId = $(this).attr('data-id');
+
+	// 	$.ajax({
+	// 		method: "GET",
+	// 		url: "/articles/" + thisId,
+	// 	}).done(function(data){
+
+	// 	})
+	// })
+
 });

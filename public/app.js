@@ -6,15 +6,16 @@ $(document).ready(function(){
 		}).done(function(results){
 			var resultsArray = [];
 			var counter = 0;
+			console.log(results);
 
 			resultsArray.push(results);
 
 		function createTitle(index){
-			var dynDiv = $('<div id="dynDiv">');
-
-			var titleP = $('<p>',{
-				'data-id': resultsArray[0][index]._id
+			var dynDiv = $('<div>',{
+				'data-id': resultsArray[0][index]._id,
+				id: 'dynDiv'
 			});
+			var titleP = $('<p>')
 			titleP.append(resultsArray[0][index].title);
 			dynDiv.append(titleP);
 
@@ -50,10 +51,21 @@ $(document).ready(function(){
 			counter++;
 			nextTitle();
 		});
+
+		// function createComments(index){
+		// 	var dynDiv = $('<div>',{
+		// 		id: 'dynCom',
+		// 		'data-id': resultsArray[0][index]._id
+		// 	});
+		// 	var commP = $('<p>');
+		// 	var comments = resultsArray[0][index].user;
+			
+		// 	commP.append('Name: ' + )
+		// }
 	});
 
-		// $(document).on('click', "p", function(){
-		// 	$('#commentDiv').empty();
+		$(document).on('click', '#dynDiv' , function(){
+			$('#commentDiv').empty();
 			var thisId = $(this).attr('data-id');
 
 			$.ajax({
@@ -69,7 +81,7 @@ $(document).ready(function(){
 					$('#commInput').val(data.user.comment);
 				}
 			});
-		// });
+		});
 
 		$(document).on('click', '#saveComm', function(){
 

@@ -84,7 +84,7 @@ app.get('/', function(req,res){
 });
 
 app.get('/api', function(req,res){
-	Pitchfork.find({}).exec(function(err, results){
+	Pitchfork.find().populate('user').exec(function(err, results){
 		if(err){
 			res.send('Error');
 		} else {

@@ -10,9 +10,18 @@ var cheerio = require('cheerio');
 var User = require('./User.model');
 var Pitchfork = require('./Pitchfork.model');
 
-var db = 'mongodb://localhost/mongocheerio1';
+var db = 
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'mongodb://localhost/mongocheerio1';
 
-mongoose.connect(db);
+mongoose.connect(db, function(err,res){
+	if(err){
+		console.log("Error connection to: " + db + '. ' + err);
+	} else {
+		console.log("Succeeded connecting to: " + db);
+	}
+});
 
 app.use('/static', express.static('public/assets'));
 app.use(express.static('public'));

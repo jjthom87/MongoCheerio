@@ -83,12 +83,23 @@ app.get('/', function(req,res){
 	res.render('index');		
 });
 
+// app.get('/', function(req,res){
+// 	Pitchfork.find({}).exec(function(err, results){
+// 		if(err){
+// 			res.send('Error');
+// 		} else {
+// 			res.render('index', {results: results});
+// 		}
+// 	});
+// });
+
 app.get('/api', function(req,res){
 	Pitchfork.find().populate('user').exec(function(err, results){
 		if(err){
 			res.send('Error');
 		} else {
-			res.json(results);
+
+			res.send(results);
 		}
 	});
 });
@@ -149,7 +160,7 @@ app.get('/api/:id', function(req,res){
 		if (err){
 			console.log(err)
 		} else {
-			res.json(doc)
+			res.send(doc)
 		}
 	});
 });

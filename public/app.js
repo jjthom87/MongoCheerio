@@ -20,7 +20,7 @@ $(document).ready(function(){
 			dynDiv.append(titleP);
 
 			var imageP = $('<img>');
-			imageP.attr('src', resultsArray[0][index].image).width(220);
+			imageP.attr('src', resultsArray[0][index].image).width(240);
 			dynDiv.append(imageP);
 
 			var linkA = $('<a>',{
@@ -34,11 +34,33 @@ $(document).ready(function(){
 			return dynDiv;
 		}
 
+		function createComments(index){
+			var dynDiv = $('<div>',{
+				id: 'dynCom',
+				'data-id': resultsArray[0][index]._id
+			});
+			var commP = $('<p>');
+			comments = resultsArray[0][index].user;
+			
+			comments.forEach(function(comment){
+				commP.append(comment.name + ": " + comment.comment);
+			});
+
+			dynDiv.append(commP);
+
+			return dynDiv;
+		};
+
 		function nextTitle(){
 			if (counter < resultsArray[0].length){
 				$('#dynDiv').remove();
+				$('#dynCom').remove();
+
 				var nextTitle = createTitle(counter);
+				var nextComm = createComments(counter);
+
 				$('#apiResults').append(nextTitle);
+				$('#reviewDiv').append(nextComm);
 			} else {
 				$('#dynDiv').remove();
 				$('#apiResults').text('End of List')
@@ -48,20 +70,11 @@ $(document).ready(function(){
 		nextTitle();
 
 		$('#nextAlbum').on('click', function(){
+			$('#commentDiv').empty();
 			counter++;
 			nextTitle();
 		});
 
-		// function createComments(index){
-		// 	var dynDiv = $('<div>',{
-		// 		id: 'dynCom',
-		// 		'data-id': resultsArray[0][index]._id
-		// 	});
-		// 	var commP = $('<p>');
-		// 	var comments = resultsArray[0][index].user;
-			
-		// 	commP.append('Name: ' + )
-		// }
 	});
 
 		$(document).on('click', '#dynDiv' , function(){
@@ -95,8 +108,7 @@ $(document).ready(function(){
 					comment: $('#commInput').val()
 				}
 			}).done(function(data){
-
-				// $('#commentDiv').empty();
+				$('#commentDiv').empty();
 			});
 			$('#nameInput').val('');
 			$('#commInput').val('');

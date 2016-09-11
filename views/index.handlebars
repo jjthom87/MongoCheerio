@@ -4,7 +4,8 @@
 	<div class="col-xs-6 col-sm-3">
 	</div>
 	<div class="col-xs-6 col-sm-2 postDiv">
-		<h2>Comment Here</h2>
+		<h2 id = "commentTag">Click on Album to Comment</h2>
+
 {{!-- 		<form method="POST" action="/comment" class="button-size">
 			<textarea type="text" name="comment"></textarea>
 			<br>
@@ -29,6 +30,7 @@
 		</p>
 			{{/if}}
 		{{/each}} --}}
+		
 		<div id="reviewDiv"></div>
 		<form action="/update?_method=PUT" method="POST">
 			<input type="hidden" name="status" value="{{this.status}}">

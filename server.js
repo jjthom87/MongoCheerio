@@ -11,8 +11,8 @@ var User = require('./User.model');
 var Pitchfork = require('./Pitchfork.model');
 
 var db = 
-process.env.MONGOLAB_URI ||
-process.env.MONGOHQ_URL ||
+process.env.MONGODB_URI || 
+process.env.MONGOHQ_URL || 
 'mongodb://localhost/mongocheerio1';
 
 mongoose.connect(db, function(err,res){

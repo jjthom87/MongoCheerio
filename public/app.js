@@ -20,7 +20,7 @@ $(document).ready(function(){
 			dynDiv.append(titleP);
 
 			var imageP = $('<img>');
-			imageP.attr('src', resultsArray[0][index].image).width(240);
+			imageP.attr('src', resultsArray[0][index].image).width(280);
 			dynDiv.append(imageP);
 
 			var linkA = $('<a>',{
@@ -43,7 +43,7 @@ $(document).ready(function(){
 			comments = resultsArray[0][index].user;
 			
 			comments.forEach(function(comment){
-				commP.append(comment.name + ": " + comment.comment);
+				commP.append(comment.name + ": " + comment.comment + '<br>');
 			});
 
 			dynDiv.append(commP);
@@ -74,6 +74,13 @@ $(document).ready(function(){
 			counter++;
 			nextTitle();
 		});
+
+		$('#prevAlbum').on('click', function(){
+			$('#commentDiv').empty();
+			counter--;
+			nextTitle();
+		});
+
 
 	});
 

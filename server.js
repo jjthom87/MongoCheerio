@@ -34,63 +34,63 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 // app.get('/scrape', function(req,res){	
-	request('http://pitchfork.com/reviews/albums/', function(err, response, html){
-		if (err) {
-			throw err
-		}
+request('http://pitchfork.com/reviews/albums/', function(err, response, html){
+	if (err) {
+		throw err
+	}
 
-		var $ = cheerio.load(html);
-		// var results = {};
-		var results = [];
+	var $ = cheerio.load(html);
+	// var results = {};
+	var results = [];
 
-		$('.review').each(function(index, element){
-			// results.title = $(element).find('h2').first().text();
-			// results.image = $(element).find('img').first().attr('src');
-			// results.link = $(element).find('a').first().attr('href');
-			var title = $(element).find('h2').first().text();
-			var image = $(element).find('img').first().attr('src');
-			var link = $(element).find('a').first().attr('href');
+	$('.review').each(function(index, element){
+		// results.title = $(element).find('h2').first().text();
+		// results.image = $(element).find('img').first().attr('src');
+		// results.link = $(element).find('a').first().attr('href');
+		var title = $(element).find('h2').first().text();
+		var image = $(element).find('img').first().attr('src');
+		var link = $(element).find('a').first().attr('href');
 
-			// var album = new Pitchfork(results);
+		// var album = new Pitchfork(results);
 
-			// album.save(function(err,doc){
-			// 	if (err){
-			// 		console.log(err)
-			// 	} else {
-			// 		console.log(doc);
-			// 	}
-			// });
-			results.push({
-				title: title,
-				image: image,
-				link: link
-			});
-		});
-		results.forEach(function(result){
-			Pitchfork.insertMany([{
-				title: result.title,
-				image: result.image,
-				link: result.link,
-				status: true
-			}]); 
+		// album.save(function(err,doc){
+		// 	if (err){
+		// 		console.log(err)
+		// 	} else {
+		// 		console.log(doc);
+		// 	}
+		// });
+		results.push({
+			title: title,
+			image: image,
+			link: link
 		});
 	});
+	results.forEach(function(result){
+		Pitchfork.insertMany([{
+			title: result.title,
+			image: result.image,
+			link: result.link,
+			status: true
+		}]); 
+	});
+});
 // 	res.send("Scrape Complete");
 // });
 
-// app.get('/', function(req,res){
-// 	User.find({}).exec(function(err, results){
-// 		if(err){
-// 			res.send('OMG ERROR');
-// 		} else {
-// 			res.render('index', {comments: results});		
-// 		}
-// 	});
-// });
-
 app.get('/', function(req,res){
-	res.render('index');		
+	User.find({}).exec(function(err, results){
+		if(err){
+			res.send('OMG ERROR');
+		} else {
+			res.render('index', {comments: results});		
+		}
+	});
 });
+
+// app.get('/', function(req,res){
+// 	res.render('index');		
+// });
 
 // app.get('/', function(req,res){
 // 	Pitchfork.find({}).exec(function(err, results){
@@ -107,7 +107,6 @@ app.get('/api', function(req,res){
 		if(err){
 			res.send('Error');
 		} else {
-
 			res.send(results);
 		}
 	});

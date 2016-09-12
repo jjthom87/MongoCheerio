@@ -6,7 +6,6 @@ $(document).ready(function(){
 		}).done(function(results){
 			var resultsArray = [];
 			var counter = 0;
-			console.log(results);
 
 			resultsArray.push(results);
 
@@ -81,7 +80,6 @@ $(document).ready(function(){
 			nextTitle();
 		});
 
-
 	});
 
 		$(document).on('click', '#dynDiv' , function(){
@@ -91,14 +89,14 @@ $(document).ready(function(){
 			$.ajax({
 				method: "GET",
 				url: "/api/" + thisId,
-			}).done(function(data){
+			}).done(function(results){
 				$('#commentDiv').append('<input id = "nameInput" type="text" name = "name" />');
 				$('#commentDiv').append('<textarea id = "commInput" type="text" name = "comment"></textarea>');
-				$('#commentDiv').append('<button data-id="'+ data._id + '" id="saveComm">Post Comment</button>');
+				$('#commentDiv').append('<button data-id="'+ results._id + '" id="saveComm">Post Comment</button>');
 
-				if(data.user){
-					$('#nameInput').val(data.user.name);
-					$('#commInput').val(data.user.comment);
+				if(results.user){
+					$('#nameInput').val(results.user.name);
+					$('#commInput').val(results.user.comment);
 				}
 			});
 		});
@@ -116,6 +114,7 @@ $(document).ready(function(){
 				}
 			}).done(function(data){
 				$('#commentDiv').empty();
+				window.location.reload();
 			});
 			$('#nameInput').val('');
 			$('#commInput').val('');
